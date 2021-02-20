@@ -53,7 +53,9 @@ public final class ShardingParameterRewriterBuilder implements ParameterRewriter
     
     private static Collection<ParameterRewriter> getParameterRewriters() {
         Collection<ParameterRewriter> result = new LinkedList<>();
+        // 自增主键参数重写器
         result.add(new ShardingGeneratedKeyInsertValueParameterRewriter());
+        // 分页参数重写器
         result.add(new ShardingPaginationParameterRewriter());
         return result;
     }

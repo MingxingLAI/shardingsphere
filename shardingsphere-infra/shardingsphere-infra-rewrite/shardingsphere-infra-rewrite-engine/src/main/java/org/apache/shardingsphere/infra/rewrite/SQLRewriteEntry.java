@@ -53,6 +53,7 @@ public final class SQLRewriteEntry {
     public SQLRewriteEntry(final ShardingSphereSchema schema, final ConfigurationProperties props, final Collection<ShardingSphereRule> rules) {
         this.schema = schema;
         this.props = props;
+        // 通过插件实现SQL Rewrite的装饰器
         decorators = OrderedSPIRegistry.getRegisteredServices(rules, SQLRewriteContextDecorator.class);
     }
     
@@ -72,6 +73,7 @@ public final class SQLRewriteEntry {
     }
     
     private SQLRewriteContext createSQLRewriteContext(final String sql, final List<Object> parameters, final SQLStatementContext<?> sqlStatementContext, final RouteContext routeContext) {
+        //创建SQL重写上下文，主要是生成对应的Token以及参数
         SQLRewriteContext result = new SQLRewriteContext(schema, sqlStatementContext, sql, parameters);
         decorate(decorators, result, routeContext);
         result.generateSQLTokens();

@@ -45,6 +45,7 @@ import java.util.LinkedList;
 /**
  * SQL token generator builder for sharding.
  */
+// 数据分片token生成器
 @RequiredArgsConstructor
 public final class ShardingTokenGenerateBuilder implements SQLTokenGeneratorBuilder {
     
@@ -68,18 +69,31 @@ public final class ShardingTokenGenerateBuilder implements SQLTokenGeneratorBuil
     
     private Collection<SQLTokenGenerator> buildSQLTokenGenerators() {
         Collection<SQLTokenGenerator> result = new LinkedList<>();
+        // 真实表名替换
         addSQLTokenGenerator(result, new TableTokenGenerator());
+        // select distinct关键字处理
         addSQLTokenGenerator(result, new DistinctProjectionPrefixTokenGenerator());
+        // select列明处理，主要是衍生列avg处理
         addSQLTokenGenerator(result, new ProjectionsTokenGenerator());
+        // order by token处理
         addSQLTokenGenerator(result, new OrderByTokenGenerator());
+        // 聚合函数的distinct关键字处理
         addSQLTokenGenerator(result, new AggregationDistinctTokenGenerator());
+        // 索引重命名
         addSQLTokenGenerator(result, new IndexTokenGenerator());
+        // offset改写
         addSQLTokenGenerator(result, new OffsetTokenGenerator());
+        // rowCount改写
         addSQLTokenGenerator(result, new RowCountTokenGenerator());
+        // 分布式主键列添加，在insert sql列最后添加
         addSQLTokenGenerator(result, new GeneratedKeyInsertColumnTokenGenerator());
+        // insert sql使用默认列明时，需要完成补齐真实列名，包括自增列
         addSQLTokenGenerator(result, new GeneratedKeyForUseDefaultInsertColumnsTokenGenerator());
+        // SET自增减生成
         addSQLTokenGenerator(result, new GeneratedKeyAssignmentTokenGenerator());
+        // insert sql的values token解析，为后续添加自增列做准备
         addSQLTokenGenerator(result, new ShardingInsertValuesTokenGenerator());
+        // 为insert values添加自增列
         addSQLTokenGenerator(result, new GeneratedKeyInsertValuesTokenGenerator());
         return result;
     }

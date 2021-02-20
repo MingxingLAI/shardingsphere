@@ -48,8 +48,10 @@ public final class KernelProcessor {
      */
     public ExecutionContext generateExecutionContext(final LogicSQL logicSQL, final ShardingSphereMetaData metaData, final ConfigurationProperties props) throws SQLException {
         audit(logicSQL, metaData);
-        RouteContext routeContext = route(logicSQL, metaData, props); // SQL 路由的入口，输入为配置，输出为routeContext
-        SQLRewriteResult rewriteResult = rewrite(logicSQL, metaData, props, routeContext); // SQL改写的入口
+        // SQL 路由的入口，输入为配置，输出为routeContext
+        RouteContext routeContext = route(logicSQL, metaData, props);
+        // SQL改写的入口
+        SQLRewriteResult rewriteResult = rewrite(logicSQL, metaData, props, routeContext);
         ExecutionContext result = createExecutionContext(logicSQL, metaData, routeContext, rewriteResult);
         logSQL(logicSQL, props, result);
         return result;

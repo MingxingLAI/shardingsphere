@@ -169,13 +169,15 @@ public final class ShardingSpherePreparedStatement extends AbstractPreparedState
         batchPreparedStatementExecutor = new BatchPreparedStatementExecutor(metaDataContexts, jdbcExecutor);
         kernelProcessor = new KernelProcessor();
     }
-    
-    @Override // 核心函数，执行引擎的入口
+
+    // 核心函数，执行引擎的入口
+    @Override
     public ResultSet executeQuery() throws SQLException {
         ResultSet result;
         try {
             clearPrevious();
-            executionContext = createExecutionContext(); // 在这里进行SQL路由和SQL改写
+            // 在这里进行SQL路由和SQL改写
+            executionContext = createExecutionContext();
             List<QueryResult> queryResults = executeQuery0();
             MergedResult mergedResult = mergeQuery(queryResults);
             result = new ShardingSphereResultSet(getResultSetsForShardingSphereResultSet(), mergedResult, this, executionContext);

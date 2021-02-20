@@ -66,6 +66,7 @@ public final class TableToken extends SQLToken implements Substitutable, RouteUn
         if (null != this.owner && routeUnit.getDataSourceMapper().getLogicName().equals(this.owner.getValue())) {
             owner = this.owner.getQuoteCharacter().wrap(routeUnit.getDataSourceMapper().getActualName()) + ".";
         }
+        // 替换成真实的物理表名
         return Joiner.on("").join(owner, tableName.getQuoteCharacter().wrap(actualTableName));
     }
     
