@@ -73,6 +73,7 @@ public final class MergeEngine {
      * @return merged result
      * @throws SQLException SQL exception
      */
+    // 合并结果
     public MergedResult merge(final List<QueryResult> queryResults, final SQLStatementContext<?> sqlStatementContext) throws SQLException {
         Optional<MergedResult> mergedResult = executeMerge(queryResults, sqlStatementContext);
         Optional<MergedResult> result = mergedResult.isPresent() ? Optional.of(decorate(mergedResult.get(), sqlStatementContext)) : decorate(queryResults.get(0), sqlStatementContext);

@@ -51,13 +51,17 @@ public final class ShardingSQLRouter implements SQLRouter<ShardingRule> {
     public RouteContext createRouteContext(final LogicSQL logicSQL, final ShardingSphereMetaData metaData, final ShardingRule rule, final ConfigurationProperties props) {
         RouteContext result = new RouteContext();
         SQLStatement sqlStatement = logicSQL.getSqlStatementContext().getSqlStatement();
+        // 对不支持分片的情况进行检查，主要用于判断一些不支持的SQL，在分片功能中不支持INSERT INTO .... ON DUPLICATE KEY、不支持更新sharding key
         Optional<ShardingStatementValidator> validator = ShardingStatementValidatorFactory.newInstance(sqlStatement);
         validator.ifPresent(optional -> optional.preValidate(rule, logicSQL.getSqlStatementContext(), logicSQL.getParameters(), metaData.getSchema()));
+        // 获取SQL的条件信息
         ShardingConditions shardingConditions = createShardingConditions(logicSQL, metaData, rule);
         boolean needMergeShardingValues = isNeedMergeShardingValues(logicSQL.getSqlStatementContext(), rule);
         if (sqlStatement instanceof DMLStatement && needMergeShardingValues) {
+            //剔除重复的sharding条件信息
             mergeShardingConditions(shardingConditions);
         }
+        // 创建分片路由引擎，进行路由分片，生成路由结果
         ShardingRouteEngineFactory.newInstance(rule, metaData, logicSQL.getSqlStatementContext(), shardingConditions, props).route(result, rule);
         validator.ifPresent(v -> v.postValidate(sqlStatement, result));
         return result;
@@ -67,7 +71,9 @@ public final class ShardingSQLRouter implements SQLRouter<ShardingRule> {
     private ShardingConditions createShardingConditions(final LogicSQL logicSQL, final ShardingSphereMetaData metaData, final ShardingRule rule) {
         List<ShardingCondition> shardingConditions;
         if (logicSQL.getSqlStatementContext().getSqlStatement() instanceof DMLStatement) {
+            // 创建条件引擎
             ShardingConditionEngine shardingConditionEngine = ShardingConditionEngineFactory.createShardingConditionEngine(logicSQL, metaData, rule);
+            // 解析SQL中的条件
             shardingConditions = shardingConditionEngine.createShardingConditions(logicSQL.getSqlStatementContext(), logicSQL.getParameters());
         } else {
             shardingConditions = Collections.emptyList();

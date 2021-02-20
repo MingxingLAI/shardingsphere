@@ -157,6 +157,7 @@ public final class ShardingSpherePreparedStatement extends AbstractPreparedState
         this.sql = sql;
         statements = new ArrayList<>();
         parameterSets = new ArrayList<>();
+        // SQL Parse入口函数
         ShardingSphereSQLParserEngine sqlParserEngine = new ShardingSphereSQLParserEngine(
                 DatabaseTypeRegistry.getTrunkDatabaseTypeName(metaDataContexts.getDefaultMetaData().getResource().getDatabaseType()));
         sqlStatement = sqlParserEngine.parse(sql, true);
@@ -169,12 +170,12 @@ public final class ShardingSpherePreparedStatement extends AbstractPreparedState
         kernelProcessor = new KernelProcessor();
     }
     
-    @Override
+    @Override // 核心函数，执行引擎的入口
     public ResultSet executeQuery() throws SQLException {
         ResultSet result;
         try {
             clearPrevious();
-            executionContext = createExecutionContext();
+            executionContext = createExecutionContext(); // 在这里进行SQL路由和SQL改写
             List<QueryResult> queryResults = executeQuery0();
             MergedResult mergedResult = mergeQuery(queryResults);
             result = new ShardingSphereResultSet(getResultSetsForShardingSphereResultSet(), mergedResult, this, executionContext);
@@ -366,7 +367,8 @@ public final class ShardingSpherePreparedStatement extends AbstractPreparedState
         SQLStatementContext<?> sqlStatementContext = SQLStatementContextFactory.newInstance(schema, parameters, sqlStatement);
         return new LogicSQL(sqlStatementContext, sql, parameters);
     }
-    
+
+    // 核心函数，归并引擎的入口
     private MergedResult mergeQuery(final List<QueryResult> queryResults) throws SQLException {
         ShardingSphereMetaData metaData = metaDataContexts.getDefaultMetaData();
         MergeEngine mergeEngine = new MergeEngine(

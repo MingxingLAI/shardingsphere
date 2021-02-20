@@ -41,7 +41,7 @@ public final class SQLRouteEngine {
     
     private final ConfigurationProperties props;
     
-    private final SPIRoutingHook routingHook = new SPIRoutingHook();
+    private final SPIRoutingHook routingHook = new SPIRoutingHook(); // 钩子
     
     /**
      * Route SQL.

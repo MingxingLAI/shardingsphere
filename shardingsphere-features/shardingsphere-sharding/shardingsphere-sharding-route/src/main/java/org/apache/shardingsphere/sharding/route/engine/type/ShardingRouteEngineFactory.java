@@ -75,16 +75,16 @@ public final class ShardingRouteEngineFactory {
                                                   final SQLStatementContext<?> sqlStatementContext, final ShardingConditions shardingConditions, final ConfigurationProperties props) {
         SQLStatement sqlStatement = sqlStatementContext.getSqlStatement();
         Collection<String> tableNames = sqlStatementContext.getTablesContext().getTableNames();
-        if (sqlStatement instanceof TCLStatement) {
+        if (sqlStatement instanceof TCLStatement) { // 事务控制类SQL(commit、rollback、savepoint、set transaction)，库广播类路由
             return new ShardingDatabaseBroadcastRoutingEngine();
         }
-        if (sqlStatement instanceof DDLStatement) {
+        if (sqlStatement instanceof DDLStatement) { // DDL SQL（create、alter、drop、truncate...），表广播类路由
             return getDDLRoutingEngine(shardingRule, metaData, sqlStatementContext);
         }
-        if (sqlStatement instanceof DALStatement) {
+        if (sqlStatement instanceof DALStatement) { // DAL SQL (show database、show tables... )，根据SQL类型选择库广播、表路由或者默认库路由
             return getDALRoutingEngine(shardingRule, metaData, sqlStatement, tableNames);
         }
-        if (sqlStatement instanceof DCLStatement) {
+        if (sqlStatement instanceof DCLStatement) { // DCL 采用表广播路由或者主库路由
             return getDCLRoutingEngine(shardingRule, metaData, sqlStatementContext);
         }
         return getDQLRoutingEngine(shardingRule, sqlStatementContext, shardingConditions, props, sqlStatement, tableNames);

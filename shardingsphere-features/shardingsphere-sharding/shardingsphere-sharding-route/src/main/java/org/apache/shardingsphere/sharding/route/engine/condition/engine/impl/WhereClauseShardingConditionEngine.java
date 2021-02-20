@@ -84,10 +84,12 @@ public final class WhereClauseShardingConditionEngine implements ShardingConditi
     private Collection<ShardingCondition> createShardingConditions(final SQLStatementContext<?> sqlStatementContext, final ExpressionSegment expressionSegment, final List<Object> parameters) {
         Collection<ShardingCondition> result = new LinkedList<>();
         for (AndPredicate each : new ExpressionBuilder(expressionSegment).extractAndPredicates().getAndPredicates()) {
+            // 得到where中各列对应的路由值，只有在配置中配置的列才会添加
             Map<Column, Collection<ShardingConditionValue>> shardingConditionValues = createShardingConditionValueMap(sqlStatementContext, each, parameters);
             if (shardingConditionValues.isEmpty()) {
                 return Collections.emptyList();
             }
+            // 根据列与路由值map创建分片条件对象，其中会合并重复的路由值
             result.add(createShardingCondition(shardingConditionValues));
         }
         return result;
@@ -106,6 +108,7 @@ public final class WhereClauseShardingConditionEngine implements ShardingConditi
                 continue;
             }
             Column column = new Column(columnSegment.get().getIdentifier().getValue(), tableName.get());
+            // 根据运算符创建对应的路由值，=、in为ListRouteValue类型，>、<、between等范围型为RangeRouteValue类型
             Optional<ShardingConditionValue> shardingConditionValue = ConditionValueGeneratorFactory.generate(each, column, parameters);
             if (shardingConditionValue.isPresent()) {
                 if (!result.containsKey(column)) {
