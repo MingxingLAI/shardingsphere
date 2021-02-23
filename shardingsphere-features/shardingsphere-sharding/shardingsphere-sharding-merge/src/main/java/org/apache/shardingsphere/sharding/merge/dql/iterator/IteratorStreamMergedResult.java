@@ -38,6 +38,7 @@ public final class IteratorStreamMergedResult extends StreamMergedResult {
     
     @Override
     public boolean next() throws SQLException {
+        // 真正获取结果的地方，依次遍历多个QueryResult中的结果
         if (getCurrentQueryResult().next()) {
             return true;
         }

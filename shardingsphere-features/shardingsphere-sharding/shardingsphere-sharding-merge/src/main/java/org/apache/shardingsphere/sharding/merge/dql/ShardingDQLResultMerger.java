@@ -102,7 +102,8 @@ public final class ShardingDQLResultMerger implements ResultMerger {
             selectStatementContext.getGroupByContext().getItems().add(orderByItem);
         }
     }
-    
+    // 分组归并，先了解内容再来看代码
+    // https://shardingsphere.apache.org/document/current/cn/features/sharding/principle/merge/#%E5%88%86%E7%BB%84%E5%BD%92%E5%B9%B6
     private MergedResult getGroupByMergedResult(final List<QueryResult> queryResults, final SelectStatementContext selectStatementContext,
                                                 final Map<String, Integer> columnLabelIndexMap, final ShardingSphereSchema schema) throws SQLException {
         return selectStatementContext.isSameGroupByAndOrderByItems()

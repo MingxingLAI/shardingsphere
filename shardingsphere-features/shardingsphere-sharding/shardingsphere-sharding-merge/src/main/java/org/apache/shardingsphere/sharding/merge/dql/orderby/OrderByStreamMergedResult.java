@@ -53,8 +53,10 @@ public class OrderByStreamMergedResult extends StreamMergedResult {
     
     private void orderResultSetsToQueue(final List<QueryResult> queryResults, final SelectStatementContext selectStatementContext, final ShardingSphereSchema schema) throws SQLException {
         for (QueryResult each : queryResults) {
+            // 对于每一个结果集，构造一个OrderByValue对象
             OrderByValue orderByValue = new OrderByValue(each, orderByItems, selectStatementContext, schema);
             if (orderByValue.next()) {
+                // 如果当前QueryResult有值，就把它放入Queue
                 orderByValuesQueue.offer(orderByValue);
             }
         }
@@ -70,13 +72,16 @@ public class OrderByStreamMergedResult extends StreamMergedResult {
             isFirstNext = false;
             return true;
         }
+        // 获取Queue中第一个结果集
         OrderByValue firstOrderByValue = orderByValuesQueue.poll();
+        // 丢地它的第一个结果，然后再返回到Queue中
         if (firstOrderByValue.next()) {
             orderByValuesQueue.offer(firstOrderByValue);
         }
         if (orderByValuesQueue.isEmpty()) {
             return false;
         }
+        // 设置Queue里面的第一个元素为当前的结果集
         setCurrentQueryResult(orderByValuesQueue.peek().getQueryResult());
         return true;
     }

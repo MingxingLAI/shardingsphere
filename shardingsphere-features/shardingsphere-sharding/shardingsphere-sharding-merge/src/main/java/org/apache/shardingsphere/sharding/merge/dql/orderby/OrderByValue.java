@@ -115,6 +115,7 @@ public final class OrderByValue implements Comparable<OrderByValue> {
     
     @Override
     public int compareTo(final OrderByValue o) {
+        // Order by 结果集的对比函数
         int i = 0;
         for (OrderByItem each : orderByItems) {
             int result = CompareUtil.compareTo(orderValues.get(i), o.orderValues.get(i), each.getSegment().getOrderDirection(),
