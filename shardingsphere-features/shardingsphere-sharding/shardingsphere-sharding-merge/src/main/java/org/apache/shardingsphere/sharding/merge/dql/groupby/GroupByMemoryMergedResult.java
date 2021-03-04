@@ -48,6 +48,8 @@ import java.util.Map.Entry;
 
 /**
  * Memory merged result for group by.
+ * 1、相对于流式归并，Memory归并会一次性的将多个数据结果集中的分组项相同的数据全数取出。
+ * 2、Memory归并需要根据聚合函数的类型进行聚合计算。
  */
 public final class GroupByMemoryMergedResult extends MemoryMergedResult<ShardingRule> {
     
@@ -61,8 +63,11 @@ public final class GroupByMemoryMergedResult extends MemoryMergedResult<Sharding
         SelectStatementContext selectStatementContext = (SelectStatementContext) sqlStatementContext;
         Map<GroupByValue, MemoryQueryResultRow> dataMap = new HashMap<>(1024);
         Map<GroupByValue, Map<AggregationProjection, AggregationUnit>> aggregationMap = new HashMap<>(1024);
+        // 依次遍历所有的结果集
         for (QueryResult each : queryResults) {
+            // 遍历每一个结果集中的结果
             while (each.next()) {
+                // 对每一个结果产生一个GroupByValue
                 GroupByValue groupByValue = new GroupByValue(each, selectStatementContext.getGroupByContext().getItems());
                 initForFirstGroupByValue(selectStatementContext, each, groupByValue, dataMap, aggregationMap);
                 aggregate(selectStatementContext, each, groupByValue, aggregationMap);
@@ -85,7 +90,8 @@ public final class GroupByMemoryMergedResult extends MemoryMergedResult<Sharding
             aggregationMap.put(groupByValue, map);
         }
     }
-    
+
+    // TODO 执行聚合的地方
     private void aggregate(final SelectStatementContext selectStatementContext, final QueryResult queryResult,
                            final GroupByValue groupByValue, final Map<GroupByValue, Map<AggregationProjection, AggregationUnit>> aggregationMap) throws SQLException {
         for (AggregationProjection each : selectStatementContext.getProjectionsContext().getAggregationProjections()) {

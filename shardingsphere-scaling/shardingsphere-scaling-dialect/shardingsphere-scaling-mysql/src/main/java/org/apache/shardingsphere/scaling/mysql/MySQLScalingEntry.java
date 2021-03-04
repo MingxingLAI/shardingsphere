@@ -36,6 +36,7 @@ import org.apache.shardingsphere.scaling.mysql.component.MySQLScalingSQLBuilder;
 /**
  * MySQL scaling entry.
  */
+// MySQL Scaling 的入口
 public final class MySQLScalingEntry implements ScalingEntry {
     
     @Override

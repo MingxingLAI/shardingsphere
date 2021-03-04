@@ -65,6 +65,7 @@ public class OrderByStreamMergedResult extends StreamMergedResult {
     
     @Override
     public boolean next() throws SQLException {
+        // 对多个有序的数组进行排序，归并排序是最适合此场景的排序算法
         if (orderByValuesQueue.isEmpty()) {
             return false;
         }
@@ -76,6 +77,9 @@ public class OrderByStreamMergedResult extends StreamMergedResult {
         OrderByValue firstOrderByValue = orderByValuesQueue.poll();
         // 丢地它的第一个结果，然后再返回到Queue中
         if (firstOrderByValue.next()) {
+            //将每个结果集的当前数据值进行比较（通过实现 Java 的 Comparable 接口完成），
+            // 并将其放入优先级队列。 每次获取下一条数据时，只需将队列顶端结果集的游标下移，
+            // 并根据新游标重新进入优先级排序队列找到自己的位置即可。
             orderByValuesQueue.offer(firstOrderByValue);
         }
         if (orderByValuesQueue.isEmpty()) {

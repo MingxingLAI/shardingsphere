@@ -35,6 +35,7 @@ import java.util.Set;
 /**
  * Logic tables merged result.
  */
+// show create table、show index、show table status的结果
 public class LogicTablesMergedResult extends MemoryMergedResult<ShardingRule> {
     
     public LogicTablesMergedResult(final ShardingRule shardingRule,

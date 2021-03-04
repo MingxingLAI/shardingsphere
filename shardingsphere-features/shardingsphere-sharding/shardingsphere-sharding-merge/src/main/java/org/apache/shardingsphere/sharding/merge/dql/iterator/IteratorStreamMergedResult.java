@@ -28,7 +28,7 @@ import java.util.List;
  * Stream merged result for iterator.
  */
 public final class IteratorStreamMergedResult extends StreamMergedResult {
-    
+    // 将多个数据结果集合并为一个单向链表，在遍历完成链表中当前数据结果集之后，将链表元素后移一位，继续遍历下一个数据结果集
     private final Iterator<QueryResult> queryResults;
     
     public IteratorStreamMergedResult(final List<QueryResult> queryResults) {

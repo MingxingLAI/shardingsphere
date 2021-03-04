@@ -41,6 +41,7 @@ public final class LimitDecoratorMergedResult extends DecoratorMergedResult {
     }
     
     private boolean skipOffset() throws SQLException {
+        // 先skip掉一部分
         for (int i = 0; i < pagination.getActualOffset(); i++) {
             if (!getMergedResult().next()) {
                 return true;
@@ -55,9 +56,11 @@ public final class LimitDecoratorMergedResult extends DecoratorMergedResult {
         if (skipAll) {
             return false;
         }
+        // 如果只有skip，limit，则返回所有
         if (!pagination.getActualRowCount().isPresent()) {
             return getMergedResult().next();
         }
+        // 如果限制返回的行数，则每次递增rowNumber，然后读取下一行
         return ++rowNumber <= pagination.getActualRowCount().get() && getMergedResult().next();
     }
 }

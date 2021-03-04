@@ -49,7 +49,8 @@ public final class MySQLBinlogEventPacketDecoder extends ByteToMessageDecoder {
         binlogContext = new BinlogContext();
         binlogContext.setChecksumLength(checksumLength);
     }
-    
+
+    // 解析binlog的入口
     @Override
     protected void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) {
         MySQLPacketPayload payload = new MySQLPacketPayload(in);

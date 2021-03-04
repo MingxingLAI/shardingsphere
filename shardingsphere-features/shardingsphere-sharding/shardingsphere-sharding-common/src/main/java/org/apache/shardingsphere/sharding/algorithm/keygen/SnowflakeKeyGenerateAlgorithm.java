@@ -37,6 +37,7 @@ import java.util.Properties;
  *     12 bits auto increment offset in one mills
  * </pre>
  */
+// 雪花算法的实现
 public final class SnowflakeKeyGenerateAlgorithm implements KeyGenerateAlgorithm {
     
     public static final long EPOCH;
@@ -85,6 +86,7 @@ public final class SnowflakeKeyGenerateAlgorithm implements KeyGenerateAlgorithm
     private long lastMilliseconds;
     
     static {
+        // 如果有多台机器，让它们之间同步
         Calendar calendar = Calendar.getInstance();
         calendar.set(2016, Calendar.NOVEMBER, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -124,13 +126,16 @@ public final class SnowflakeKeyGenerateAlgorithm implements KeyGenerateAlgorithm
             currentMilliseconds = timeService.getCurrentMillis();
         }
         if (lastMilliseconds == currentMilliseconds) {
+            // 产生的主键太多，已经溢出了，则等下一次时间
             if (0L == (sequence = (sequence + 1) & SEQUENCE_MASK)) {
                 currentMilliseconds = waitUntilNextTime(currentMilliseconds);
             }
         } else {
+            // 避免并发数太低的时候，每次都产生偶数
             vibrateSequenceOffset();
             sequence = sequenceOffset;
         }
+        // 保留最后一次时间，一遍下次生成时使用
         lastMilliseconds = currentMilliseconds;
         return ((currentMilliseconds - EPOCH) << TIMESTAMP_LEFT_SHIFT_BITS) | (workerId << WORKER_ID_LEFT_SHIFT_BITS) | sequence;
     }
@@ -143,11 +148,13 @@ public final class SnowflakeKeyGenerateAlgorithm implements KeyGenerateAlgorithm
         long timeDifferenceMilliseconds = lastMilliseconds - currentMilliseconds;
         Preconditions.checkState(timeDifferenceMilliseconds < maxTolerateTimeDifferenceMilliseconds, 
                 "Clock is moving backwards, last time is %d milliseconds, current time is %d milliseconds", lastMilliseconds, currentMilliseconds);
+        // 时间回拨以后需要sleep一会，这一会业务是不可用状态
         Thread.sleep(timeDifferenceMilliseconds);
         return true;
     }
     
     private long waitUntilNextTime(final long lastTime) {
+        // 等待下一次时间，要求和当前时间不同
         long result = timeService.getCurrentMillis();
         while (result <= lastTime) {
             result = timeService.getCurrentMillis();

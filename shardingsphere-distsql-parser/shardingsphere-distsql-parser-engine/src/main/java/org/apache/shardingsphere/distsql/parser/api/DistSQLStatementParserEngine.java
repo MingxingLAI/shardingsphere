@@ -33,6 +33,7 @@ import org.apache.shardingsphere.sql.parser.sql.common.statement.SQLStatement;
  * Dist SQL statement parser engine.
  */
 public final class DistSQLStatementParserEngine {
+    // 分布式SQL方言，像管理数据库一样管理Proxy相关的配置
     
     /**
      * Parse SQL.

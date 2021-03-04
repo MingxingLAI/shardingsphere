@@ -55,6 +55,7 @@ import java.util.Random;
 /**
  * MySQL binlog dumper.
  */
+// dump MySQL的binlog，并解析binlog的内容
 @Slf4j
 public final class MySQLBinlogDumper extends AbstractScalingExecutor implements LogDumper {
     

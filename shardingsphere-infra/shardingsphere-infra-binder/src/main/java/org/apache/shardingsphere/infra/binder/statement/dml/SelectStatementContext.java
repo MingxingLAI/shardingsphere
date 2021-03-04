@@ -171,6 +171,7 @@ public final class SelectStatementContext extends CommonSQLStatementContext<Sele
      * @return group by and order by sequence is same or not
      */
     public boolean isSameGroupByAndOrderByItems() {
+        // 是有Group by和Order by的字段相同时，才会使用GroupByStreamMergedResult进行结果归并
         return !groupByContext.getItems().isEmpty() && groupByContext.getItems().equals(orderByContext.getItems());
     }
     

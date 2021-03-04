@@ -61,6 +61,8 @@ public final class ShardingDQLResultMerger implements ResultMerger {
         SelectStatementContext selectStatementContext = (SelectStatementContext) sqlStatementContext;
         selectStatementContext.setIndexes(columnLabelIndexMap);
         MergedResult mergedResult = build(queryResults, selectStatementContext, columnLabelIndexMap, schema);
+        // group by 和 order by 以后，依然可以使用limit，如下所示：
+        // select * from t_order_0 group by order_id order by user_id limit 2, 3;
         return decorate(queryResults, selectStatementContext, mergedResult);
     }
     

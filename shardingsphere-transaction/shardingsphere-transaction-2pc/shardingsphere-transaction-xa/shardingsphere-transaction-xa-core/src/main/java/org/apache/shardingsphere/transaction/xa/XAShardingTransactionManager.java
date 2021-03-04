@@ -41,6 +41,8 @@ import java.util.Map;
 /**
  * Sharding transaction manager for XA.
  */
+//  分布式事务的 XA 实现类。它主要 负责对多数据源进行管理和适配
+//  并且将相应事务的开启、提交和回滚操作委托给具体的 XA 事务管理器
 public final class XAShardingTransactionManager implements ShardingTransactionManager {
     
     private final Map<String, XATransactionDataSource> cachedDataSources = new HashMap<>();

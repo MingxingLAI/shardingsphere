@@ -49,8 +49,10 @@ public abstract class MemoryMergedResult<T extends ShardingSphereRule> implement
     
     protected MemoryMergedResult(final T rule, final ShardingSphereSchema schema, final SQLStatementContext sqlStatementContext, final List<QueryResult> queryResults) throws SQLException {
         List<MemoryQueryResultRow> memoryQueryResultRowList = init(rule, schema, sqlStatementContext, queryResults);
+        // 生成一个遍历结果的迭代器
         memoryResultSetRows = memoryQueryResultRowList.iterator();
         if (!memoryQueryResultRowList.isEmpty()) {
+            // 如果结果集不为空，就把第一个结果赋值给 currentResultSetRow
             currentResultSetRow = memoryQueryResultRowList.get(0);
         }
     }
