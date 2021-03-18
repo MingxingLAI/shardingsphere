@@ -37,18 +37,19 @@ import java.util.stream.Stream;
 /**
  * Governance facade.
  */
+// Facade模式，服务治理的顶层入口
 public final class GovernanceFacade implements AutoCloseable {
     
     private boolean isOverwrite;
     
     private GovernanceRepositoryFacade repositoryFacade;
-    
+    // 配置中心
     @Getter
     private ConfigCenter configCenter;
-    
+    // 注册中心
     @Getter
     private RegistryCenter registryCenter;
-    
+    // 各种监听事件的listener
     private GovernanceListenerManager listenerManager;
     
     /**

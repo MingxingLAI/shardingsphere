@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResourceIDGenerator {
+    // 单例模式，创建唯一的ID
     
     private static final ResourceIDGenerator INSTANCE = new ResourceIDGenerator();
     

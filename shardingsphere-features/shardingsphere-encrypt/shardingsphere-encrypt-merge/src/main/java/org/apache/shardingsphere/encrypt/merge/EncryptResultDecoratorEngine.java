@@ -37,7 +37,8 @@ import org.apache.shardingsphere.sql.parser.sql.common.statement.dal.DALStatemen
  * Result decorator engine for encrypt.
  */
 public final class EncryptResultDecoratorEngine implements ResultDecoratorEngine<EncryptRule> {
-    
+    // 对加密以后的查询结果进行处理，这里是处理的入口
+    // 主要是依赖EncryptDALResultDecorator和EncryptDQLResultDecorator来进行结果的解密
     @Override
     public ResultDecorator newInstance(final DatabaseType databaseType, final ShardingSphereSchema schema,
                                        final EncryptRule encryptRule, final ConfigurationProperties props, final SQLStatementContext sqlStatementContext) {

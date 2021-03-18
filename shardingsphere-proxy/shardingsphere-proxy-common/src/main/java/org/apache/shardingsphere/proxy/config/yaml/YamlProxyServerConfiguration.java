@@ -32,11 +32,11 @@ import java.util.Properties;
 @Getter
 @Setter
 public final class YamlProxyServerConfiguration implements YamlConfiguration {
-    
+    // 认证配置
     private YamlAuthenticationConfiguration authentication;
     
     private YamlGovernanceConfiguration governance;
-    
+
     private YamlScalingConfiguration scaling;
     
     private Properties props = new Properties();

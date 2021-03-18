@@ -45,12 +45,13 @@ public final class EncryptRule implements TableContainedRule {
     static {
         ShardingSphereServiceLoader.register(EncryptAlgorithm.class);
     }
-    
+    // 加解密规则
     private final Map<String, EncryptAlgorithm> encryptors = new LinkedHashMap<>();
-    
+    // 脱敏数据表
     private final Map<String, EncryptTable> tables = new LinkedHashMap<>();
     
     public EncryptRule(final EncryptRuleConfiguration config) {
+        // 验证加密规则的有效性，然后初始化加密算法和需要加密的库表
         Preconditions.checkArgument(isValidRuleConfiguration(config), "Invalid encrypt column configurations in EncryptTableRuleConfigurations.");
         config.getEncryptors().forEach((key, value) -> encryptors.put(key, ShardingSphereAlgorithmFactory.createAlgorithm(value, EncryptAlgorithm.class)));
         config.getTables().forEach(each -> tables.put(each.getName(), new EncryptTable(each)));

@@ -48,6 +48,7 @@ public final class YamlShardingSphereDataSourceFactory {
      * @throws SQLException SQL exception
      * @throws IOException IO exception
      */
+    // 输入参数是一个File对象
     public static DataSource createDataSource(final File yamlFile) throws SQLException, IOException {
         YamlRootRuleConfigurations configurations = YamlEngine.unmarshal(yamlFile, YamlRootRuleConfigurations.class);
         return ShardingSphereDataSourceFactory.createDataSource(configurations.getDataSources(), SWAPPER_ENGINE.swapToRuleConfigurations(configurations.getRules()), configurations.getProps());
@@ -90,6 +91,7 @@ public final class YamlShardingSphereDataSourceFactory {
      * @throws IOException IO exception
      */
     public static DataSource createDataSource(final DataSource dataSource, final File yamlFile) throws SQLException, IOException {
+        // 创建加密的DataSource
         Map<String, DataSource> dataSourceMap = new HashMap<>(1, 1);
         dataSourceMap.put(DefaultSchema.LOGIC_NAME, dataSource);
         return createDataSource(dataSourceMap, yamlFile);

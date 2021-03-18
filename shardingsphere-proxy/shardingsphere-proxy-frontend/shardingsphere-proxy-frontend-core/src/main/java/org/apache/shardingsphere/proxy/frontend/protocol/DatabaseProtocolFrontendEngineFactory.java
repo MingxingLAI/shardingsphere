@@ -40,6 +40,7 @@ public final class DatabaseProtocolFrontendEngineFactory {
      * @param databaseType database type
      * @return new instance of database protocol frontend engine
      */
+    // 工厂类，为不同的数据库，创建不同的数据库协议前端引擎
     public static DatabaseProtocolFrontendEngine newInstance(final DatabaseType databaseType) {
         for (DatabaseProtocolFrontendEngine each : ShardingSphereServiceLoader.newServiceInstances(DatabaseProtocolFrontendEngine.class)) {
             if (DatabaseTypeRegistry.getActualDatabaseType(each.getDatabaseType()).getName().equals(databaseType.getName())) {

@@ -45,13 +45,16 @@ public final class EncryptMergedResult implements MergedResult {
     
     @Override
     public Object getValue(final int columnIndex, final Class<?> type) throws SQLException {
+        // 如果不是加密列，直接返回
         if (!queryWithCipherColumn) {
             return mergedResult.getValue(columnIndex, type);
         }
         Optional<EncryptAlgorithm> encryptAlgorithm = metaData.findEncryptor(columnIndex);
+        // 加密算法不存在，直接返回
         if (!encryptAlgorithm.isPresent()) {
             return mergedResult.getValue(columnIndex, type);
         }
+        // 获取加密的内容，并进行解密
         String ciphertext = (String) mergedResult.getValue(columnIndex, String.class);
         return null == ciphertext ? null : encryptAlgorithm.get().decrypt(ciphertext);
     }

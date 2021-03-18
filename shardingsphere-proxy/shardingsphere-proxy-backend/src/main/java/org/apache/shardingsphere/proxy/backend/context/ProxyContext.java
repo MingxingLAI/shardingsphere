@@ -36,6 +36,7 @@ import java.util.List;
  */
 @Getter
 public final class ProxyContext {
+    // 单例模式，保留了Proxy相关的所有配置，后面要用的时候，直接获取ProxyContext的唯一实例即可
     
     private static final ProxyContext INSTANCE = new ProxyContext();
     

@@ -32,7 +32,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Getter
 public final class StandardTransactionContexts implements TransactionContexts {
-    
+    // 事务上下文当前内容比较少，仅仅是保存了到事务管理器，我们可以通过上下文来获取事务管理器引擎
+    // 再根据事务管理器引擎，来获取真正的事务管理器（包括了2PC事务和BASE事务）
     private final Map<String, ShardingTransactionManagerEngine> engines;
     
     public StandardTransactionContexts() {

@@ -30,6 +30,7 @@ import org.apache.shardingsphere.governance.repository.api.config.GovernanceConf
  * Governance repository facade.
  */
 @Getter
+// Facade模式，对外提供注册服务和配置服务的实现
 public final class GovernanceRepositoryFacade implements AutoCloseable {
     
     static {

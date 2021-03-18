@@ -101,6 +101,7 @@ public final class DatabaseCommunicationEngine {
      * @throws SQLException SQL exception
      */
     public ResponseHeader execute() throws SQLException {
+        // 1. 2. 在kernelProcessor中进行SQL路由和SQL改写
         return execute(kernelProcessor.generateExecutionContext(logicSQL, metaData, ProxyContext.getInstance().getMetaDataContexts().getProps()));
     }
     
@@ -113,6 +114,7 @@ public final class DatabaseCommunicationEngine {
         try {
             locked = tryGlobalLock(executionContext, ProxyContext.getInstance().getMetaDataContexts().getProps().<Long>getValue(ConfigurationPropertyKey.LOCK_WAIT_TIMEOUT_MILLISECONDS));
             proxySQLExecutor.checkExecutePrerequisites(executionContext);
+            // 3. 执行
             executeResults = proxySQLExecutor.execute(executionContext);
             refreshSchema(executionContext);
         } finally {
@@ -120,6 +122,7 @@ public final class DatabaseCommunicationEngine {
                 releaseGlobalLock();
             }
         }
+        // 4. 结果归并
         ExecuteResult executeResultSample = executeResults.iterator().next();
         return executeResultSample instanceof QueryResult
                 ? processExecuteQuery(executionContext, executeResults.stream().map(each -> (QueryResult) each).collect(Collectors.toList()), (QueryResult) executeResultSample)
@@ -146,6 +149,7 @@ public final class DatabaseCommunicationEngine {
     
     private QueryResponseHeader processExecuteQuery(final ExecutionContext executionContext, final List<QueryResult> queryResults, final QueryResult queryResultSample) throws SQLException {
         queryHeaders = createQueryHeaders(executionContext, queryResultSample);
+        // 结果归并
         mergedResult = mergeQuery(executionContext.getSqlStatementContext(), queryResults);
         return new QueryResponseHeader(queryHeaders);
     }

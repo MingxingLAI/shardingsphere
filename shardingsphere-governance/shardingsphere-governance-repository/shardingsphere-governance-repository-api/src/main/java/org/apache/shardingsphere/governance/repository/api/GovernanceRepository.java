@@ -44,6 +44,7 @@ public interface GovernanceRepository extends TypedSPI {
      * @param name governance center name
      * @param config governance center configuration
      */
+    // 初始化配置中心
     void init(String name, GovernanceCenterConfiguration config);
     
     /**
@@ -54,6 +55,7 @@ public interface GovernanceRepository extends TypedSPI {
      * @param key key of data
      * @return value of data
      */
+    // 获取配置项数据
     String get(String key);
     
     /**
@@ -62,6 +64,7 @@ public interface GovernanceRepository extends TypedSPI {
      * @param key key of data
      * @return sub-nodes name list
      */
+    // 获取子配置项列表
     List<String> getChildrenKeys(String key);
     
     /**
@@ -70,6 +73,7 @@ public interface GovernanceRepository extends TypedSPI {
      * @param key key of data
      * @param value value of data
      */
+    // 持久化配置项
     void persist(String key, String value);
     
     /**
@@ -77,6 +81,7 @@ public interface GovernanceRepository extends TypedSPI {
      *
      * @param key key of data
      */
+    // 删除配置项
     void delete(String key);
     
     /**
@@ -85,10 +90,12 @@ public interface GovernanceRepository extends TypedSPI {
      * @param key key of data
      * @param listener data changed event listener
      */
+    // 对配置项或者路径进行监听，这是最重要的函数，该函数传入了一个代表事件监听器的DataChangedEventListener接口
     void watch(String key, DataChangedEventListener listener);
     
     /**
      * Close.
      */
+    // 关闭配置中心
     void close();
 }

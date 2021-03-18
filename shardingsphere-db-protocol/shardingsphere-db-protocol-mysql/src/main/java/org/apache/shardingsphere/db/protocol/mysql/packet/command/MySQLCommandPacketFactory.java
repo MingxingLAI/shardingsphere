@@ -56,6 +56,7 @@ public final class MySQLCommandPacketFactory {
             case COM_FIELD_LIST:
                 return new MySQLComFieldListPacket(payload);
             case COM_QUERY:
+                // SQL语句返回MySQLComQueryPacket命令包
                 return new MySQLComQueryPacket(payload);
             case COM_STMT_PREPARE:
                 return new MySQLComStmtPreparePacket(payload);

@@ -46,6 +46,7 @@ public final class EncryptDALResultDecorator implements ResultDecorator<EncryptR
     }
     
     private boolean isNeedMergeEncryptColumns(final SQLStatement sqlStatement) {
+        // 对于Describe和Show ColumnsSQL语句才需要处理加密列
         return sqlStatement instanceof MySQLDescribeStatement || sqlStatement instanceof MySQLShowColumnsStatement;
     }
 }

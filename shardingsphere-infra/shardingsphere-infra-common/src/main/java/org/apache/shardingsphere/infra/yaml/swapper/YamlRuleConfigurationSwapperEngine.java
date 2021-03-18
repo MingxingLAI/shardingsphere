@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 /**
  * YAML rule configuration swapper engine.
  */
+// YamlShardingRuleConfiguration 转换为 ShardingRuleConfiguration
 public final class YamlRuleConfigurationSwapperEngine {
     
     static {

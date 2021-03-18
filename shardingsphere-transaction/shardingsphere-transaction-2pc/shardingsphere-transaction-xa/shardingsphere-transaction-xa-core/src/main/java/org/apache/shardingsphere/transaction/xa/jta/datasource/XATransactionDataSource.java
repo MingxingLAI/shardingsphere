@@ -42,7 +42,7 @@ import java.util.Set;
 public final class XATransactionDataSource implements AutoCloseable {
     
     private static final Set<String> CONTAINER_DATASOURCE_NAMES = Sets.newHashSet("AtomikosDataSourceBean", "BasicManagedDataSource");
-    
+    // ThreadLocal变量，用以保存当前线程所涉及到的Transaction对象列表
     private final ThreadLocal<Set<Transaction>> enlistedTransactions = ThreadLocal.withInitial(HashSet::new);
     
     private final DatabaseType databaseType;
@@ -78,11 +78,17 @@ public final class XATransactionDataSource implements AutoCloseable {
         if (CONTAINER_DATASOURCE_NAMES.contains(dataSource.getClass().getSimpleName())) {
             return dataSource.getConnection();
         }
+        // 从DataSource中创建一个普通的Connection对象
         Connection result = dataSource.getConnection();
+        // 通过工厂方法将普通的Connection对象转化为对应的XAConnection对象
         XAConnection xaConnection = XAConnectionFactory.createXAConnection(databaseType, xaDataSource, result);
+        // 从xaTransactionManager中获取transaction对象
         Transaction transaction = xaTransactionManager.getTransactionManager().getTransaction();
+        // 判断当前线程中是否存在这个Transaction
         if (!enlistedTransactions.get().contains(transaction)) {
+            // 将XAConnection中的XAResource与目标Transaction对象关联起来
             transaction.enlistResource(new SingleXAResource(resourceName, xaConnection.getXAResource()));
+            //Transaction 中注册一个 Synchronization 接口
             transaction.registerSynchronization(new Synchronization() {
                 @Override
                 public void beforeCompletion() {

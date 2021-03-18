@@ -22,9 +22,10 @@ import lombok.Getter;
 /**
  * Bootstrap arguments.
  */
+// 封装命令行参数的解析，如果没有指定命令行参数就使用默认值
 @Getter
 public final class BootstrapArguments {
-    
+
     private static final String DEFAULT_CONFIG_PATH = "/conf/";
     
     private static final int DEFAULT_PORT = 3307;

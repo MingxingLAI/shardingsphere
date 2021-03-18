@@ -27,7 +27,7 @@ import java.util.Collection;
  * Configuration listener manager.
  */
 public final class ConfigurationListenerManager {
-    
+    // 配置结构中3大顶层配置，分别是元数据、props和authentication
     private final MetaDataListener metaDataListener;
     
     private final PropertiesChangedListener propertiesChangedListener;

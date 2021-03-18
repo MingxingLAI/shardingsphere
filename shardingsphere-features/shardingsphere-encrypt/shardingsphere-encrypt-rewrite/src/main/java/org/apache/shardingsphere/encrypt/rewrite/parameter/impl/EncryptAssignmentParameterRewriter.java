@@ -59,10 +59,13 @@ public final class EncryptAssignmentParameterRewriter extends EncryptParameterRe
     @Override
     public void rewrite(final ParameterBuilder parameterBuilder, final SQLStatementContext sqlStatementContext, final List<Object> parameters) {
         String tableName = ((TableAvailable) sqlStatementContext).getAllTables().iterator().next().getTableName().getIdentifier().getValue();
+        // 获取 SetAssignmentsSegment 并进行遍历
         for (AssignmentSegment each : getSetAssignmentSegment(sqlStatementContext.getSqlStatement()).getAssignments()) {
+            // 判断是否存在 ShardingEncryptor
             if (each.getValue() instanceof ParameterMarkerExpressionSegment && getEncryptRule().findEncryptor(tableName, each.getColumn().getIdentifier().getValue()).isPresent()) {
                 StandardParameterBuilder standardParameterBuilder = parameterBuilder instanceof StandardParameterBuilder
                         ? (StandardParameterBuilder) parameterBuilder : ((GroupedParameterBuilder) parameterBuilder).getParameterBuilders().get(0);
+                // 对参数进行加密
                 encryptParameters(standardParameterBuilder, tableName, each, parameters);
             }
         }
@@ -81,6 +84,7 @@ public final class EncryptAssignmentParameterRewriter extends EncryptParameterRe
         String columnName = assignmentSegment.getColumn().getIdentifier().getValue();
         int parameterMarkerIndex = ((ParameterMarkerExpressionSegment) assignmentSegment.getValue()).getParameterMarkerIndex();
         Object originalValue = parameters.get(parameterMarkerIndex);
+        // 加密
         Object cipherValue = getEncryptRule().getEncryptValues(tableName, columnName, Collections.singletonList(originalValue)).iterator().next();
         parameterBuilder.addReplacedParameters(parameterMarkerIndex, cipherValue);
         Collection<Object> addedParameters = new LinkedList<>();

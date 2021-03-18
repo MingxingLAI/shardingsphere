@@ -54,6 +54,7 @@ public abstract class WrapperAdapter implements Wrapper {
      * @param argumentTypes argument types
      * @param arguments arguments
      */
+    // 添加要执行的方法
     @SneakyThrows(ReflectiveOperationException.class)
     public final void recordMethodInvocation(final Class<?> targetClass, final String methodName, final Class<?>[] argumentTypes, final Object[] arguments) {
         jdbcMethodInvocations.add(new JdbcMethodInvocation(targetClass.getMethod(methodName, argumentTypes), arguments));
@@ -64,6 +65,7 @@ public abstract class WrapperAdapter implements Wrapper {
      * 
      * @param target target object
      */
+    // 通过反射，执行前面添加的方法
     public final void replayMethodsInvocation(final Object target) {
         jdbcMethodInvocations.forEach(each -> each.invoke(target));
     }

@@ -29,6 +29,7 @@ import org.apache.shardingsphere.infra.executor.kernel.ExecutorEngine;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public final class BackendExecutorContext {
+    // 单例模式，保存真实的执行引擎，相当于是对执行引擎做了一个缓存
     
     private static final BackendExecutorContext INSTANCE = new BackendExecutorContext();
     

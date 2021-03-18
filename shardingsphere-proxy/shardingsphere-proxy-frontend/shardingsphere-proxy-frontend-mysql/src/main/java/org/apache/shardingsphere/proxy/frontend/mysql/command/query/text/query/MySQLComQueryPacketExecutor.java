@@ -49,16 +49,19 @@ public final class MySQLComQueryPacketExecutor implements QueryCommandExecutor {
     private int currentSequenceId;
     
     public MySQLComQueryPacketExecutor(final MySQLComQueryPacket packet, final BackendConnection backendConnection) throws SQLException {
+        // 包含了SQL和Connection，可以执行SQL语句
         textProtocolBackendHandler = TextProtocolBackendHandlerFactory.newInstance(DatabaseTypeRegistry.getActualDatabaseType("MySQL"), packet.getSql(), backendConnection);
     }
     
     @Override
     public Collection<DatabasePacket<?>> execute() throws SQLException {
+        // 调用的是MySQLComQueryPacketExecutor的execute
         ResponseHeader responseHeader = textProtocolBackendHandler.execute();
         return responseHeader instanceof QueryResponseHeader ? processQuery((QueryResponseHeader) responseHeader) : processUpdate((UpdateResponseHeader) responseHeader);
     }
     
     private Collection<DatabasePacket<?>> processQuery(final QueryResponseHeader queryResponseHeader) {
+        // 包装Query的结果
         responseType = ResponseType.QUERY;
         Collection<DatabasePacket<?>> result = ResponsePacketBuilder.buildQueryResponsePackets(queryResponseHeader);
         currentSequenceId = result.size();
@@ -66,6 +69,7 @@ public final class MySQLComQueryPacketExecutor implements QueryCommandExecutor {
     }
     
     private Collection<DatabasePacket<?>> processUpdate(final UpdateResponseHeader updateResponseHeader) {
+        // 包装update的结果
         responseType = ResponseType.UPDATE;
         return ResponsePacketBuilder.buildUpdateResponsePackets(updateResponseHeader);
     }

@@ -34,9 +34,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Proxy state context.
  */
+// 设计模式中的状态模式，根据不同的状态执行不同的操作
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProxyStateContext {
-    
+
     private static final Map<StateType, ProxyState> STATES = new ConcurrentHashMap<>(3, 1);
     
     static {

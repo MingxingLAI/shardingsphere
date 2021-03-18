@@ -33,6 +33,7 @@ import javax.transaction.TransactionManager;
 /**
  * Atomikos XA transaction manager.
  */
+// 一个普通的封装类，封装了对Atomikos的UserTransactionManager UserTransactionService的调用
 public final class AtomikosTransactionManager implements XATransactionManager {
     
     private UserTransactionManager transactionManager;

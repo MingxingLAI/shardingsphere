@@ -86,16 +86,23 @@ public final class CommandExecutorTask implements Runnable {
     }
     
     private boolean executeCommand(final ChannelHandlerContext context, final PacketPayload payload, final BackendConnection backendConnection) throws SQLException {
+        // 1 获取SQL命令执行引擎
         CommandExecuteEngine commandExecuteEngine = databaseProtocolFrontendEngine.getCommandExecuteEngine();
+        // 2 获取SQL命令类型
         CommandPacketType type = commandExecuteEngine.getCommandPacketType(payload);
+        // 3 获取SQL命令包
         CommandPacket commandPacket = commandExecuteEngine.getCommandPacket(payload, type, backendConnection);
+        // 4 获取SQL命令执行器
         CommandExecutor commandExecutor = commandExecuteEngine.getCommandExecutor(type, commandPacket, backendConnection);
+        // 5 执行SQL请求
         Collection<DatabasePacket<?>> responsePackets = commandExecutor.execute();
         if (responsePackets.isEmpty()) {
             return false;
         }
+        // 5.1 将Field Data（列信息）写入ResultSet数据包
         responsePackets.forEach(context::write);
         if (commandExecutor instanceof QueryCommandExecutor) {
+            // 5.2 将Row Data（行数据）写入ResultSet数据包
             commandExecuteEngine.writeQueryData(context, backendConnection, (QueryCommandExecutor) commandExecutor, responsePackets.size());
             return true;
         }

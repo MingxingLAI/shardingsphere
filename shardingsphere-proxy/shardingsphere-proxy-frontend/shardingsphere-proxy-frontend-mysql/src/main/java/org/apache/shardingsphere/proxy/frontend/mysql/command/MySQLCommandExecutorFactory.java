@@ -60,6 +60,7 @@ public final class MySQLCommandExecutorFactory {
      * @return command executor
      * @throws SQLException SQL exception
      */
+    // 根据不同的SQL类型，创建不同的Executor，这里的Executor并不是指线程池，应该是Handle或者Task
     public static CommandExecutor newInstance(final MySQLCommandPacketType commandPacketType, final CommandPacket commandPacket, final BackendConnection backendConnection) throws SQLException {
         log.debug("Execute packet type: {}, value: {}", commandPacketType, commandPacket);
         switch (commandPacketType) {
@@ -70,12 +71,15 @@ public final class MySQLCommandExecutorFactory {
             case COM_FIELD_LIST:
                 return new MySQLComFieldListPacketExecutor((MySQLComFieldListPacket) commandPacket, backendConnection);
             case COM_QUERY:
+                // Statement，不使用预解析功能，最终调用TextProtocolBackendHandler执行
                 return new MySQLComQueryPacketExecutor((MySQLComQueryPacket) commandPacket, backendConnection);
             case COM_PING:
                 return new MySQLComPingExecutor();
             case COM_STMT_PREPARE:
+                // PrepareStatement分为4步，分别是prepare、execute、close、reset，只有execute会将请求转发给底层的MySQL服务器
                 return new MySQLComStmtPrepareExecutor((MySQLComStmtPreparePacket) commandPacket, backendConnection);
             case COM_STMT_EXECUTE:
+                // PrepareStatement，使用预解析功能，最终调用DatabaseCommunicationEngine执行
                 return new MySQLComStmtExecuteExecutor((MySQLComStmtExecutePacket) commandPacket, backendConnection);
             case COM_STMT_RESET:
                 return new MySQLComStmtResetExecutor((MySQLComStmtResetPacket) commandPacket);

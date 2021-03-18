@@ -40,6 +40,7 @@ import java.util.Map;
 /**
  * YAML engine.
  */
+// YamlEngine 的作用是将各种形式的输入内容转换成一个 Yaml 对象
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class YamlEngine {
     

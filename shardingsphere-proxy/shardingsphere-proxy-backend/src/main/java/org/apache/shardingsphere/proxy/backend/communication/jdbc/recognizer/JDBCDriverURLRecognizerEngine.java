@@ -32,10 +32,11 @@ import java.util.ServiceLoader;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JDBCDriverURLRecognizerEngine {
-    
+    // JDBC_DRIVER_URL_RECOGNIZERS保存了所有的识别器
     private static final Collection<JDBCDriverURLRecognizer> JDBC_DRIVER_URL_RECOGNIZERS = new LinkedList<>();
     
     static {
+        // 这里直接使用的是ServiceLoader，ServiceLoader返回的是每一个类的实例
         for (JDBCDriverURLRecognizer each : ServiceLoader.load(JDBCDriverURLRecognizer.class)) {
             JDBC_DRIVER_URL_RECOGNIZERS.add(each);
         }
@@ -47,7 +48,9 @@ public final class JDBCDriverURLRecognizerEngine {
      * @param url JDBC URL
      * @return JDBC driver URL recognizer
      */
+    // 根据用户配置的URL，返回对应的数据库的识别器，以便调用不同的数据库驱动
     public static JDBCDriverURLRecognizer getJDBCDriverURLRecognizer(final String url) {
+        // url的取值如 jdbc:mysql://9.134.193.40:3306/ds1?serverTimezone=UTC&useSSL=false
         JDBCDriverURLRecognizer result = JDBC_DRIVER_URL_RECOGNIZERS.stream().filter(each -> isMatchURL(url, each)).findAny()
                 .orElseThrow(() -> new ShardingSphereException("Cannot resolve JDBC url `%s`. Please implements `%s` and add to SPI.", url, JDBCDriverURLRecognizer.class.getName()));
         if (result instanceof JDBCDriverComposeURLRecognizer) {
@@ -57,6 +60,7 @@ public final class JDBCDriverURLRecognizerEngine {
     }
     
     private static boolean isMatchURL(final String url, final JDBCDriverURLRecognizer jdbcDriverURLRecognizer) {
+        // Prefix理论上只会有一个，但是ShardingSphere为了扩展实现为一个Collection，因此，这里使用stream进行匹配
         return jdbcDriverURLRecognizer.getURLPrefixes().stream().anyMatch(url::startsWith);
     }
 }

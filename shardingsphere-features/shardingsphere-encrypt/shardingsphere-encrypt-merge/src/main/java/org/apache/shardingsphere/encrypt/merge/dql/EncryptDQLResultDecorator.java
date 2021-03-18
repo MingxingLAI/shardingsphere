@@ -37,6 +37,7 @@ public final class EncryptDQLResultDecorator implements ResultDecorator<EncryptR
     
     @Override
     public MergedResult decorate(final QueryResult queryResult, final SQLStatementContext<?> sqlStatementContext, final EncryptRule rule) {
+        // 构建了一个 EncryptMergedResult 对象并进行返回
         return new EncryptMergedResult(metaData, new TransparentMergedResult(queryResult), queryWithCipherColumn);
     }
     

@@ -45,6 +45,7 @@ public final class EncryptParameterRewriterBuilder implements ParameterRewriterB
     
     @Override
     public Collection<ParameterRewriter> getParameterRewriters(final ShardingSphereSchema schema) {
+        // 返回所有的rewriter
         Collection<ParameterRewriter> result = getParameterRewriters();
         for (ParameterRewriter each : result) {
             setUpParameterRewriters(each, schema);
@@ -62,6 +63,7 @@ public final class EncryptParameterRewriterBuilder implements ParameterRewriterB
     }
     
     private void setUpParameterRewriters(final ParameterRewriter parameterRewriter, final ShardingSphereSchema schema) {
+        // 对于不同的rewriter，它还依赖一些特定的字段，如schema、encryptRule、queryWithCipherColumn
         if (parameterRewriter instanceof SchemaMetaDataAware) {
             ((SchemaMetaDataAware) parameterRewriter).setSchema(schema);
         }

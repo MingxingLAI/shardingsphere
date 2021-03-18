@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 /**
  * Connection ID generator.
  */
+// 单例模式，一个自增ID生成器，用以生成连接ID
 @NoArgsConstructor(access = AccessLevel.NONE)
 public final class ConnectionIdGenerator {
     

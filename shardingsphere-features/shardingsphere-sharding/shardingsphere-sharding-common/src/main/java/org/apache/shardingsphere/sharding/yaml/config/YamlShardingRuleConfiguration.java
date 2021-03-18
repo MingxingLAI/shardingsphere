@@ -37,6 +37,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
+// YamlShardingRuleConfiguration就是在ShardingRuleConfiguration上加了一个Yaml前缀
 public final class YamlShardingRuleConfiguration implements YamlRuleConfiguration {
     
     private Map<String, YamlTableRuleConfiguration> tables = new LinkedHashMap<>();

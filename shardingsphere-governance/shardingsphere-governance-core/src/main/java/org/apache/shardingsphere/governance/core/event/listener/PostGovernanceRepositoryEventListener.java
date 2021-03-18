@@ -32,6 +32,7 @@ import java.util.Optional;
  * 
  * @param <T> type of event
  */
+// 该类的主要作用是实现watch接口
 @RequiredArgsConstructor
 public abstract class PostGovernanceRepositoryEventListener<T> implements GovernanceListener {
     

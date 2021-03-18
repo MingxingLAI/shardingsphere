@@ -31,7 +31,8 @@ public final class MySQLRecognizer implements JDBCDriverURLRecognizer {
     public String getDatabaseType() {
         return "MySQL";
     }
-    
+
+    // url: jdbc:mysql://9.134.193.40:3306/ds1?serverTimezone=UTC&useSSL=false
     @Override
     public Collection<String> getURLPrefixes() {
         return Collections.singletonList("jdbc:mysql:");

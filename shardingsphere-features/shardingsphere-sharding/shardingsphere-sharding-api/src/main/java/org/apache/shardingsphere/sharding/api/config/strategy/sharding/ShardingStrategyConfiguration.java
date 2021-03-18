@@ -21,7 +21,7 @@ package org.apache.shardingsphere.sharding.api.config.strategy.sharding;
  * Sharding strategy configuration.
  */
 public interface ShardingStrategyConfiguration {
-    
+    // 这是一个空的接口，存在一系列的实现，每个实现代表一种分片策略
     /**
      * Get sharding algorithm name.
      * 

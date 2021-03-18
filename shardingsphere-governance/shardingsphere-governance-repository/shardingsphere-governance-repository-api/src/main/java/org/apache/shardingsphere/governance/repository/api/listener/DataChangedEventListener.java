@@ -27,5 +27,6 @@ public interface DataChangedEventListener {
      * 
      * @param event data changed event
      */
+    // 当数据发生变动时触发
     void onChange(DataChangedEvent event);
 }

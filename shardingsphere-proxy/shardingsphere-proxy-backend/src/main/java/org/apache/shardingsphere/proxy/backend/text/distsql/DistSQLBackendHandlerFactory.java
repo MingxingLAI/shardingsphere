@@ -45,6 +45,7 @@ public final class DistSQLBackendHandlerFactory {
      * @throws SQLException SQL exception
      */
     public static Optional<TextProtocolBackendHandler> newInstance(final DatabaseType databaseType, final SQLStatement sqlStatement, final BackendConnection backendConnection) throws SQLException {
+        // 调用factory方法创建TextProtocolBackendHandler
         Optional<TextProtocolBackendHandler> rqlBackendHandler = RQLBackendHandlerFactory.newInstance(sqlStatement, backendConnection);
         if (rqlBackendHandler.isPresent()) {
             return rqlBackendHandler;

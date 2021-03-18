@@ -37,19 +37,19 @@ import java.util.Map;
 @Getter
 @Setter
 public final class ShardingRuleConfiguration implements RuleConfiguration {
-    
+    // 表分片规则列表，这也是必须要设置的配置项
     private Collection<ShardingTableRuleConfiguration> tables = new LinkedList<>();
-    
+
     private Collection<ShardingAutoTableRuleConfiguration> autoTables = new LinkedList<>();
-    
+    // 绑定表规则列表
     private Collection<String> bindingTableGroups = new LinkedList<>();
-    
+    // 广播表规则列表
     private Collection<String> broadcastTables = new LinkedList<>();
-    
+    // 默认分库策略
     private ShardingStrategyConfiguration defaultDatabaseShardingStrategy;
-    
+    // 默认分表策略
     private ShardingStrategyConfiguration defaultTableShardingStrategy;
-    
+    // 默认自增列生成器
     private KeyGenerateStrategyConfiguration defaultKeyGenerateStrategy;
     
     private Map<String, ShardingSphereAlgorithmConfiguration> shardingAlgorithms = new LinkedHashMap<>();

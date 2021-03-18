@@ -65,15 +65,14 @@ public final class TextProtocolBackendHandlerFactory {
         if (sqlStatement instanceof TCLStatement) {
             return TransactionBackendHandlerFactory.newInstance((TCLStatement) sqlStatement, sql, backendConnection);
         }
+        // SQL语句走的路径
         Optional<TextProtocolBackendHandler> distSQLBackendHandler = DistSQLBackendHandlerFactory.newInstance(databaseType, sqlStatement, backendConnection);
         if (distSQLBackendHandler.isPresent()) {
             return distSQLBackendHandler.get();
         }
         Optional<TextProtocolBackendHandler> databaseAdminBackendHandler = DatabaseAdminBackendHandlerFactory.newInstance(databaseType, sqlStatement, backendConnection);
-        if (databaseAdminBackendHandler.isPresent()) {
-            return databaseAdminBackendHandler.get();
-        }
-        return DatabaseBackendHandlerFactory.newInstance(sqlStatement, sql, backendConnection);
+        return databaseAdminBackendHandler.orElseGet(() -> DatabaseBackendHandlerFactory
+                .newInstance(sqlStatement, sql, backendConnection));
     }
     
     private static DatabaseType getBackendDatabaseType(final DatabaseType defaultDatabaseType, final BackendConnection backendConnection) {

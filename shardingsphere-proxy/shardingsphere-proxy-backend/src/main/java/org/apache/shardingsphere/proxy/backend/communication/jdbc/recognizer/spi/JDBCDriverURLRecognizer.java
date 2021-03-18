@@ -25,7 +25,7 @@ import java.util.Collection;
  * JDBC driver URL recognizer.
  */
 public interface JDBCDriverURLRecognizer extends DatabaseTypeAwareSPI {
-    
+    // URL识别器接口，所有的识别器都继承自JDBCDriverURLRecognizer
     /**
      * Get JDBC URL prefixes.
      * 

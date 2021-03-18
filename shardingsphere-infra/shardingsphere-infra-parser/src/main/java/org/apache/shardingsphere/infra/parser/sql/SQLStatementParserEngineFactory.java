@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQLStatementParserEngineFactory {
-    
+    // SQL Parse Engine的缓存，避免每次都创建
     private static final Map<String, SQLStatementParserEngine> ENGINES = new ConcurrentHashMap<>();
     
     /**

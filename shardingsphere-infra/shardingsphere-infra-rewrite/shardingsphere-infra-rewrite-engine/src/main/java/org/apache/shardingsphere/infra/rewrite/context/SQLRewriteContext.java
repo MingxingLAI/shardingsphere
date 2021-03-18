@@ -41,13 +41,13 @@ import java.util.List;
 public final class SQLRewriteContext {
     
     private final ShardingSphereSchema schema;
-    
+    // SQL语句上下文
     private final SQLStatementContext<?> sqlStatementContext;
     
     private final String sql;
-    
+    // 参数列表
     private final List<Object> parameters;
-    
+    // 参数构建器
     private final ParameterBuilder parameterBuilder;
     
     private final List<SQLToken> sqlTokens = new LinkedList<>();

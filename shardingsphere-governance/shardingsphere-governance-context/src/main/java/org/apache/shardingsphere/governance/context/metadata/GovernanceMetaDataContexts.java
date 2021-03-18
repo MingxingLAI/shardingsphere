@@ -77,6 +77,7 @@ public final class GovernanceMetaDataContexts implements MetaDataContexts {
     public GovernanceMetaDataContexts(final StandardMetaDataContexts metaDataContexts, final GovernanceFacade governanceFacade) {
         this.governanceFacade = governanceFacade;
         this.metaDataContexts = metaDataContexts;
+        // 注册EventBus，用以处理事件
         ShardingSphereEventBus.getInstance().register(this);
         disableDataSources();
         persistMetaData();
@@ -89,7 +90,9 @@ public final class GovernanceMetaDataContexts implements MetaDataContexts {
     }
     
     private void disableDataSources(final String schemaName, final StatusContainedRule rule) {
+        // 通过注册注册中心获取到DataSource的名称
         Collection<String> disabledDataSources = governanceFacade.getRegistryCenter().loadDisabledDataSources(schemaName);
+        // 发送DisabledEvent，关闭这个DataSource
         disabledDataSources.stream().map(this::getDataSourceName).forEach(each -> rule.updateRuleStatus(new DataSourceNameDisabledEvent(each, true)));
     }
     

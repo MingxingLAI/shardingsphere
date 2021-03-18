@@ -26,14 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public final class EncryptColumnRuleConfiguration {
-    
+    // 列的逻辑名
     private final String logicColumn;
-    
+    // 加密列
     private final String cipherColumn;
-    
+    // 辅助查询字段
     private final String assistedQueryColumn;
-    
+    // 明文列
     private final String plainColumn;
-    
+    // 加密算法
     private final String encryptorName;
 }

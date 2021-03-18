@@ -48,13 +48,15 @@ import java.util.stream.Collectors;
 /**
  * Abstract bootstrap initializer.
  */
+// 实现了一些通用的方法
 @Slf4j
 public abstract class AbstractBootstrapInitializer implements BootstrapInitializer {
-    
+    // TODO Proxy如何与Initializer关联起来？
     private final ShardingSphereProxy shardingSphereProxy = new ShardingSphereProxy();
     
     @Override
     public final void init(final YamlProxyConfiguration yamlConfig, final int port) throws SQLException {
+        // Proxy的真正启动就是在init函数中启动
         ProxyConfiguration proxyConfig = getProxyConfiguration(yamlConfig);
         MetaDataContexts metaDataContexts = decorateMetaDataContexts(createMetaDataContexts(proxyConfig));
         String xaTransactionMangerType = metaDataContexts.getProps().getValue(ConfigurationPropertyKey.XA_TRANSACTION_MANAGER_TYPE);
@@ -62,10 +64,12 @@ public abstract class AbstractBootstrapInitializer implements BootstrapInitializ
         ProxyContext.getInstance().init(metaDataContexts, transactionContexts);
         setDatabaseServerInfo();
         initScalingWorker(yamlConfig);
+        // 启动了一个Proxy
         shardingSphereProxy.start(port);
     }
     
     private MetaDataContexts createMetaDataContexts(final ProxyConfiguration proxyConfig) throws SQLException {
+        // 对每一个URL，创建对应的DataSource
         Map<String, Map<String, DataSource>> dataSourcesMap = createDataSourcesMap(proxyConfig.getSchemaDataSources());
         MetaDataContextsBuilder metaDataContextsBuilder = new MetaDataContextsBuilder(dataSourcesMap, proxyConfig.getSchemaRules(), proxyConfig.getAuthentication(), proxyConfig.getProps());
         return metaDataContextsBuilder.build();
@@ -126,7 +130,7 @@ public abstract class AbstractBootstrapInitializer implements BootstrapInitializ
         }
         return Optional.empty();
     }
-    
+    // 4个方法让子类实现
     protected abstract ProxyConfiguration getProxyConfiguration(YamlProxyConfiguration yamlConfig);
     
     protected abstract MetaDataContexts decorateMetaDataContexts(MetaDataContexts metaDataContexts);

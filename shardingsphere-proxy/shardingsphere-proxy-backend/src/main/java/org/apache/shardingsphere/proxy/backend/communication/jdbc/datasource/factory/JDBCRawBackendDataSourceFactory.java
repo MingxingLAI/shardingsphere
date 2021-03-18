@@ -37,7 +37,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class JDBCRawBackendDataSourceFactory implements JDBCBackendDataSourceFactory {
-    
+    // 单例模式，使用hikari来创建DataSource
     private static final JDBCRawBackendDataSourceFactory INSTANCE = new JDBCRawBackendDataSourceFactory();
     
     static {
@@ -84,6 +84,7 @@ public final class JDBCRawBackendDataSourceFactory implements JDBCBackendDataSou
     
     private void validateDriverClassName(final String driverClassName) {
         try {
+            // 加载数据库驱动
             Class.forName(driverClassName);
         } catch (final ClassNotFoundException ex) {
             throw new ShardingSphereException("Cannot load JDBC driver class `%s`, make sure it in ShardingSphere-Proxy's classpath.", driverClassName);

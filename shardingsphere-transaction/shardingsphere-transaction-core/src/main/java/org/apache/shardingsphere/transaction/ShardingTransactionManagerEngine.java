@@ -38,7 +38,7 @@ import java.util.ServiceLoader;
  */
 @Slf4j
 public final class ShardingTransactionManagerEngine {
-    
+    // ShardingTransactionManagerEngine 作为分布式事务的入口，更多的是对ShardingTransactionManager的管理
     private final Map<TransactionType, ShardingTransactionManager> transactionManagerMap = new EnumMap<>(TransactionType.class);
     
     public ShardingTransactionManagerEngine() {
@@ -46,6 +46,7 @@ public final class ShardingTransactionManagerEngine {
     }
     
     private void loadShardingTransactionManager() {
+        // 通过ServiceLoader加载ShardingTransactionManager实现类
         for (ShardingTransactionManager each : ServiceLoader.load(ShardingTransactionManager.class)) {
             if (transactionManagerMap.containsKey(each.getTransactionType())) {
                 log.warn("Find more than one {} transaction manager implementation class, use `{}` now",
@@ -65,6 +66,7 @@ public final class ShardingTransactionManagerEngine {
      */
     public void init(final DatabaseType databaseType, final Map<String, DataSource> dataSourceMap, final String xaTransactionMangerType) {
         for (Entry<TransactionType, ShardingTransactionManager> entry : transactionManagerMap.entrySet()) {
+            // 创建ResourceDataSource对象
             entry.getValue().init(databaseType, getResourceDataSources(dataSourceMap), xaTransactionMangerType);
         }
     }

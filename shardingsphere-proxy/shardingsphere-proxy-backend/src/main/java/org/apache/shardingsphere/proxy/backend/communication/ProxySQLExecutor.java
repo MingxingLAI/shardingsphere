@@ -160,6 +160,7 @@ public final class ProxySQLExecutor {
         } catch (final SQLException ex) {
             return getSaneExecuteResults(executionContext, ex);
         }
+        // 真正执行操作的地方
         return jdbcExecutor.execute(executionContext.getSqlStatementContext().getSqlStatement(), executionGroups, isReturnGeneratedKeys, isExceptionThrown);
     }
     

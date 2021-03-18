@@ -27,10 +27,16 @@ import java.util.Collection;
 /**
  * Governance listener manager.
  */
+
+/*
+ * 关于整个 Listener 机制，可以简单归纳为通过监听注册中心上相关数据项的操作情况来生成具体的事件，
+ * 并对事件进行包装之后再进行转发。至于如何处理这些转发后的事件，取决于具体的应用场景，
+ * 典型的一个应用场景就是控制数据访问的熔断
+ */
 public final class GovernanceListenerManager {
-    
+    // 配置变更监听管理器
     private final ConfigurationListenerManager configurationListenerManager;
-    
+    // 注册节点的状态变更监听管理器
     private final RegistryListenerManager registryListenerManager;
     
     public GovernanceListenerManager(final RegistryRepository registryRepository, final ConfigurationRepository configurationRepository, final Collection<String> schemaNames) {

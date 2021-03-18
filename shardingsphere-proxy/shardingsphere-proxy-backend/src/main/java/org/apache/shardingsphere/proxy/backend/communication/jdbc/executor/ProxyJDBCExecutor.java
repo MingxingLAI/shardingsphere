@@ -57,6 +57,7 @@ public final class ProxyJDBCExecutor {
      */
     public Collection<ExecuteResult> execute(final SQLStatement sqlStatement, final Collection<ExecutionGroup<JDBCExecutionUnit>> executionGroups, 
                                              final boolean isReturnGeneratedKeys, final boolean isExceptionThrown) throws SQLException {
+        // 获取数据库类型、创建callback，执行SQL语句
         DatabaseType databaseType = ProxyContext.getInstance().getMetaDataContexts().getMetaData(backendConnection.getSchemaName()).getResource().getDatabaseType();
         return jdbcExecutor.execute(executionGroups,
                 ProxyJDBCExecutorCallbackFactory.newInstance(type, databaseType, sqlStatement, backendConnection, isReturnGeneratedKeys, isExceptionThrown, true),

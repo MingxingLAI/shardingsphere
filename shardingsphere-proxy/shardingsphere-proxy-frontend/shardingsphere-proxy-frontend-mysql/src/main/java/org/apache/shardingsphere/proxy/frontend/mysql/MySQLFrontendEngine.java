@@ -35,7 +35,7 @@ public final class MySQLFrontendEngine implements DatabaseProtocolFrontendEngine
     private final FrontendContext frontendContext = new FrontendContext(false, true);
     
     private final MySQLAuthenticationEngine authEngine = new MySQLAuthenticationEngine();
-    
+    // SQL命令执行引擎，在这里面解析SQL语句，执行SQL命令
     private final MySQLCommandExecuteEngine commandExecuteEngine = new MySQLCommandExecuteEngine();
     
     private final DatabasePacketCodecEngine<?> codecEngine = new MySQLPacketCodecEngine();

@@ -35,6 +35,7 @@ public final class ShardingSphereSQLParserEngine {
     
     public ShardingSphereSQLParserEngine(final String databaseTypeName) {
         sqlStatementParserEngine = SQLStatementParserEngineFactory.getSQLStatementParserEngine(databaseTypeName);
+        // 大概率是不用的，但是每次都需要创建重复对象，可优化
         distSQLStatementParserEngine = new DistSQLStatementParserEngine();
     }
     

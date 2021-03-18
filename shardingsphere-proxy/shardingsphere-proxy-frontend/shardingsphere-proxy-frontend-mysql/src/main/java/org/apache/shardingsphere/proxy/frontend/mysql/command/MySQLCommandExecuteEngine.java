@@ -44,7 +44,7 @@ import java.util.Optional;
  * Command execute engine for MySQL.
  */
 public final class MySQLCommandExecuteEngine implements CommandExecuteEngine {
-    
+    // 获取SQL的请求类型
     @Override
     public MySQLCommandPacketType getCommandPacketType(final PacketPayload payload) {
         return MySQLCommandPacketTypeLoader.getCommandPacketType((MySQLPacketPayload) payload);

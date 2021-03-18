@@ -72,6 +72,7 @@ public final class DatabaseCommunicationEngineFactory {
      * @param backendConnection backend connection
      * @return binary protocol backend handler
      */
+    // 在ShardingSphere中，BinaryProtocol代表使用预解析器，TextProtocol代码不适用预解析器
     public DatabaseCommunicationEngine newBinaryProtocolInstance(final SQLStatement sqlStatement, final String sql, final List<Object> parameters, final BackendConnection backendConnection) {
         ShardingSphereMetaData metaData = ProxyContext.getInstance().getMetaData(backendConnection.getSchemaName());
         LogicSQL logicSQL = createLogicSQL(sqlStatement, sql, new ArrayList<>(parameters), metaData);

@@ -53,6 +53,7 @@ public final class ShardingSphereProxy {
      */
     @SneakyThrows(InterruptedException.class)
     public void start(final int port) {
+        // 一个典型的netty服务启动程序
         try {
             createEventLoopGroup();
             ServerBootstrap bootstrap = new ServerBootstrap();
