@@ -104,6 +104,7 @@ import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.SimpleE
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.SingleTableClauseContext;
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.SpecialFunctionContext;
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.StringLiteralsContext;
+import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.BlockCommentContext;
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.SubqueryContext;
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.SubstringFunctionContext;
 import org.apache.shardingsphere.sql.parser.autogen.MySQLStatementParser.TableAliasRefListContext;
@@ -244,6 +245,11 @@ public abstract class MySQLStatementSQLVisitor extends MySQLStatementBaseVisitor
         return new StringLiteralValue(ctx.getText());
     }
     
+    @Override
+    public final ASTNode visitBlockComment(final BlockCommentContext ctx) {
+        return new StringLiteralValue(ctx.getText());
+    }
+
     @Override
     public final ASTNode visitNumberLiterals(final NumberLiteralsContext ctx) {
         return new NumberLiteralValue(ctx.getText());
@@ -629,6 +635,10 @@ public abstract class MySQLStatementSQLVisitor extends MySQLStatementBaseVisitor
     public ASTNode visitQuerySpecification(final QuerySpecificationContext ctx) {
         MySQLSelectStatement result = new MySQLSelectStatement();
         result.setProjections((ProjectionsSegment) visit(ctx.projections()));
+        if (null != ctx.blockComment()) {
+            StringLiteralValue literalValue = (StringLiteralValue) visit(ctx.blockComment());
+            result.setBlockComment(literalValue.getValue());
+        }
         if (null != ctx.selectSpecification()) {
             result.getProjections().setDistinctRow(isDistinct(ctx));
         }

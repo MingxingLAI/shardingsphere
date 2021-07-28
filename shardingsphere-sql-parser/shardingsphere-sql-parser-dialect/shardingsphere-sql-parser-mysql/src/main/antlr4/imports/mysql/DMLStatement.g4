@@ -17,7 +17,7 @@
 
 grammar DMLStatement;
 
-import Symbol, Keyword, MySQLKeyword, Literals, BaseRule;
+import Symbol, Keyword, MySQLKeyword, Literals, BaseRule, Comments;
 
 insert
     : INSERT insertSpecification INTO? tableName partitionNames? (insertValuesClause | setAssignmentsClause | insertSelectClause) onDuplicateKeyClause?
@@ -157,7 +157,7 @@ queryPrimary
     ;
 
 querySpecification
-    : SELECT selectSpecification* projections selectIntoExpression? fromClause? whereClause? groupByClause? havingClause? windowClause?
+    : SELECT blockComment? selectSpecification* projections selectIntoExpression? fromClause? whereClause? groupByClause? havingClause? windowClause?
     ;
 
 call
@@ -401,4 +401,8 @@ tableIdentOptWild
 
 tableAliasRefList
     : tableIdentOptWild (COMMA_ tableIdentOptWild)*
+    ;
+
+blockComment
+    : BLOCK_COMMENT
     ;

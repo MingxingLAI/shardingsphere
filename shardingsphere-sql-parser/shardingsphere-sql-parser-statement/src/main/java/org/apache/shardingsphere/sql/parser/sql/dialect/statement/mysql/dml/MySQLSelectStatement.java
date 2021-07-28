@@ -39,6 +39,8 @@ public final class MySQLSelectStatement extends SelectStatement implements MySQL
     private LockSegment lock;
     
     private WindowSegment window;
+
+    private String blockComment;
     
     /**
      * Get order by segment.
